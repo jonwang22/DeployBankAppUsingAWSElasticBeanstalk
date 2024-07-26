@@ -37,6 +37,9 @@ We can simply just deploy our app and be ready to go for our customers.
 
 ## Issues/Troubleshooting
 
+1. Git Cloning a Repo without Forking
+2. Creating AWS Elastic Beanstalk environment. Health Monitoring settings. Default options selected, needed to use Basic and had to deselect a managed monitoring service in order to proceed and create the environment.
+3. Unable to access the application via the domain. 
 
 
 ## Optimization
