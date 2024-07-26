@@ -39,7 +39,12 @@ We can simply just deploy our app and be ready to go for our customers.
 
 1. Git Cloning a Repo without Forking
 2. Creating AWS Elastic Beanstalk environment. Health Monitoring settings. Default options selected, needed to use Basic and had to deselect a managed monitoring service in order to proceed and create the environment.
-3. Unable to access the application via the domain. 
+3. Unable to access the application via the domain.
+Error Log:
+```
+2024/07/26 15:19:29 [error] 2753#2753: *5 connect() failed (111: Connection refused) while connecting to upstream, client: 96.255.240.58, server: , request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:8000/", host: "deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com"
+2024/07/26 15:19:29 [error] 2753#2753: *5 connect() failed (111: Connection refused) while connecting to upstream, client: 96.255.240.58, server: , request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:8000/favicon.ico", host: "deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com", referrer: "http://deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com/"
+```
 
 
 ## Optimization
