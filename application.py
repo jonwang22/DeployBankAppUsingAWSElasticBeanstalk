@@ -13,7 +13,7 @@ import xlwt
 from fpdf import FPDF
 from sqlalchemy import text
 
-application = Flask(__name__)
+application = app = Flask(__name__)
 bcrypt = Bcrypt(application)
 application.secret_key = os.urandom(24)
 
@@ -665,5 +665,5 @@ def calculate_balance(current_balance, transaction_amount):
 if __name__ == '__main__':
     application.secret_key = 'super_secret_key'
     application.debug = True
-    port = int(os.environ.get('PORT', 8000))
+    port = int(os.environ.get('PORT', 5000))
     application.run(host='0.0.0.0', port=port)
