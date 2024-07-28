@@ -13,7 +13,7 @@ import xlwt
 from fpdf import FPDF
 from sqlalchemy import text
 
-application = app = Flask(__name__)
+application = Flask(__name__)
 bcrypt = Bcrypt(application)
 application.secret_key = os.urandom(24)
 
