@@ -6,6 +6,8 @@ Jenkins is our CI/CD tool that allows us to build and test our code hosted here 
 AWS Elastic Beanstalk is a managed service that reduces our need to handle capacity provisioning, load balancing, scaling, and application health monitoring.  
 We can simply just deploy our app and be ready to go for our customers.
 
+This is also helping us dive into and learn more about CI/CD practices as well as app deployment and management.
+
 ## Steps Taken to Implement
 
 1. Cloned repository from another repository so that I can have full control over this repository and the files in it. If I need to make any sort of changes then I can.
@@ -29,6 +31,10 @@ We can simply just deploy our app and be ready to go for our customers.
    	d. Issues can arise during the build and testing phase. Build issues can be caused by configuration drift or version diffs on dependencies. Testing issues could happen if the unit tests weren't written properly or the logic doesn't work. Using Jenkins allows developers to iterate and test their code many times as needed before shipping it out to production environments, ensuring a working product/service for the customers to use. 
 
 7. Created AWS Elastic Beanstalk Environment to deploy our application.
+
+      a. This allowed us to have our application managed by AWS Elastic Beanstalk. We don't have to worry about capacity, load balancing, autoscaling, or application health monitoring.
+
+      b. We can choose to create a web server environment or a worker environment and choose which platform we want to use. For this app we used Python.
 
 
 ## System Design Diagram
@@ -76,7 +82,7 @@ Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR]
 Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR] Shutting down: Master
 Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR] Reason: Worker failed to boot.
 ```
-
+The reason why we were getting these errors is because when we uploaded our application, we uploaded the zip folder directly downloaded from GitHub. AWS Elastic Beanstalk looks for the application file at the top level when the zip file is unzipped. In order to provide that properly, I had to take the Github zip and unzip it to get the main folder. Go into that folder and then zip all the files up inside and then upload that zip file to AWS Elastic Beanstalk. Then the web app could be accessed by the domain given.
 
 ## Optimization
 
