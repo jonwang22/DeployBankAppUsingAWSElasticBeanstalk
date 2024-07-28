@@ -1,20 +1,52 @@
 # Deploying a Banking Application Using AWS Elastic Beanstalk
 ## Purpose
 
-We want to deploy our banking application for others to use. To do this, we are leveraging Jenkins and AWS Elastic Beanstalk.  
-Jenkins is our CI/CD tool that allows us to build and test our code hosted here in this Github repository.  
-AWS Elastic Beanstalk is a managed service that reduces our need to handle capacity provisioning, load balancing, scaling, and application health monitoring.  
+I wanted to learn more about how to use Jenkins to build and test code and AWS Elastic Beanstalk to deploy and host my web application.
+Jenkins is a CI/CD tool that allows us to build and test our code hosted here in this Github repository.  
+AWS Elastic Beanstalk is a managed service that eliminates our need to manually handle capacity provisioning, load balancing, auto-scaling, and application health monitoring.  
 We can simply just deploy our app and be ready to go for our customers.
 
-This is also helping us dive into and learn more about CI/CD practices as well as app deployment and management.
+The steps listed below show what was done to get this web application up and running.
 
 ## Steps Taken to Implement
 
-1. Cloned repository from another repository so that I can have full control over this repository and the files in it. If I need to make any sort of changes then I can.
+1. Git clone code repository to personal repository without creating a fork. The reason why we don't want to fork is because we want to have a completely independent copy of the repository, unrelated to the original repository. We can also modify access controls or repository settings that would not be possible if we had forked the original repository.
 
-2. Created EC2 Instance to host Jenkins for me to build and test my code.
+      a. You can do it multiple ways but I chose to use this method https://gist.github.com/hohowin/954fba73f5a02d37e15a6ea5e5b10b54
+         - Create empty repo in Github, cannot have any commits.
+         - On EC2 instance or local machine, create empty directory and run `git init`
+         - Navigate to that empty directory and run `git pull $SOURCE_GITHUB_REPO` for your code
+         - Once the source code has been pulled down to your directory, run `git remote add origin $GIT_URL_NEW_CREATED_REPO` and then `git push origin main\master`
+            * Git remote essentially creates a link between your local respository to your remote repository hosted in Github.
+      b. The other ways you can clone a repository:
+         - Git clone source repository and add a remote link to destination repository.
+         - Git clone both source and destination repositories, copy files locally from source repo to destination repo and then git push files in the destination repo.
+   
+2. Created EC2 Instance to host Jenkins
+
+      a. Created EC2 Instance in AWS.
+      b. Created a security group that allowed SSH, HTTP and custom port 8080 for Jenkins.
 
 3. Installed Jenkins to my Jenkins server and started it up.
+
+   ```
+   # Updating existing packages on system, installing fontconfig, java runtime env, software properties common to manage additional software repos. Added deadsnakes PPA and installed python3.7
+   sudo apt update && sudo apt install fontconfig openjdk-17-jre software-properties-common && sudo add-apt-repository ppa:deadsnakes/ppa && sudo apt install python3.7 python3.7-venv
+
+   # Downloaded the Jenkins respository key. Added the key to the /usr/share/keyrings directory
+   sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+
+   # Added Jenkins repo to sources list
+   echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+   # Downloaded all updates for packages again, installed Jenkins
+   sudo apt-get update
+   sudo apt-get install jenkins
+
+   # Started Jenkins and checked to make sure Jenkins is active and running with no issues
+   sudo systemctl start jenkins
+   sudo systemctl status jenkins
+   ```
 
 4. Logged in to Jenkins and created an admin user for me to perform the build and test actions I need before deploying my code to production via AWS Elastic Beanstalk.
 
