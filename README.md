@@ -46,6 +46,37 @@ Error Log:
 2024/07/26 15:19:29 [error] 2753#2753: *5 connect() failed (111: Connection refused) while connecting to upstream, client: 96.255.240.58, server: , request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:8000/favicon.ico", host: "deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com", referrer: "http://deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com/"
 ```
 
+Found ElasticBeanstalk Error logs. Web Server isn't starting up.
+```
+Jul 28 02:29:37 ip-172-31-47-211 web: Traceback (most recent call last):
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/arbiter.py", line 609, in spawn_worker
+Jul 28 02:29:37 ip-172-31-47-211 web: worker.init_process()
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/workers/gthread.py", line 95, in init_process
+Jul 28 02:29:37 ip-172-31-47-211 web: super().init_process()
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/workers/base.py", line 134, in init_process
+Jul 28 02:29:37 ip-172-31-47-211 web: self.load_wsgi()
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/workers/base.py", line 146, in load_wsgi
+Jul 28 02:29:37 ip-172-31-47-211 web: self.wsgi = self.app.wsgi()
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/app/base.py", line 67, in wsgi
+Jul 28 02:29:37 ip-172-31-47-211 web: self.callable = self.load()
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/app/wsgiapp.py", line 58, in load
+Jul 28 02:29:37 ip-172-31-47-211 web: return self.load_wsgiapp()
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/app/wsgiapp.py", line 48, in load_wsgiapp
+Jul 28 02:29:37 ip-172-31-47-211 web: return util.import_app(self.app_uri)
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/var/app/venv/staging-LQM1lest/lib64/python3.7/site-packages/gunicorn/util.py", line 371, in import_app
+Jul 28 02:29:37 ip-172-31-47-211 web: mod = importlib.import_module(module)
+Jul 28 02:29:37 ip-172-31-47-211 web: File "/usr/lib64/python3.7/importlib/__init__.py", line 127, in import_module
+Jul 28 02:29:37 ip-172-31-47-211 web: return _bootstrap._gcd_import(name[level:], package, level)
+Jul 28 02:29:37 ip-172-31-47-211 web: File "<frozen importlib._bootstrap>", line 1006, in _gcd_import
+Jul 28 02:29:37 ip-172-31-47-211 web: File "<frozen importlib._bootstrap>", line 983, in _find_and_load
+Jul 28 02:29:37 ip-172-31-47-211 web: File "<frozen importlib._bootstrap>", line 965, in _find_and_load_unlocked
+Jul 28 02:29:37 ip-172-31-47-211 web: ModuleNotFoundError: No module named 'application'
+Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2805] [INFO] Worker exiting (pid: 2805)
+Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR] Worker (pid:2805) exited with code 3
+Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR] Shutting down: Master
+Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR] Reason: Worker failed to boot.
+```
+
 
 ## Optimization
 
