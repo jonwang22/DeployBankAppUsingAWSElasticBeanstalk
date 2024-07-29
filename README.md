@@ -164,6 +164,25 @@ There were many other rabbit holes I dug myself into that were not the root of t
 
 ## Optimization
 
+1. What are the benefits of using managed services for cloud infrastructure?
 
+	* Only need to be responsible for application source code and building/testing the code in a tool like Jenkins.
+ 	* Managed Services handle underlying infrastructure for you. No need to worry about Capacity, Load Balancing, Auto-scaling, or health monitoring.
+  	* No need to worry about manually configuring your environment. Managed services provides options for you to choose from and the service handles the rest.
+
+2. What are some issues that a retail bank would face choosing this method of deployment and how would you address/resolve them?
+
+	* Manual process from Build/Test to deploy. Maybe incorporate a tool such as Infrastructure as Code (IAC) depending on the cloud environment you're using.
+ 	* Version controlling application. Having to download the zip file from Github Repo then uploading it manually to Elastic Beanstalk could cause errors and issues. Automating this would be the best way to deal with reducing the impact and chances of human error.
+
+3. What are other disadvantages of using elastic beanstalk or similar managed services for deploying applications?
+
+	* Unable to control and customize certain aspects of the service.
+ 	* You're stuck with what they provide you. Python3.7 is on a deprecation path. Users of AWS Elastic Beanstalk will need to make sure they update their code and software to use Python3.8 and above. Platforms are limited in the sense of you can only use what the managed service provides.
+  	* Potentially higher operational costs
+   	* Dependent on new features or rollouts or service compatibility, have to wait on service provider for those updates.
+   	* Unclear issues and logs. They may be less straightforward.
 
 ## Conclusion
+
+This is a great project to figure out how to use Jenkins and deploy to AWS Elastic Beanstalk.
