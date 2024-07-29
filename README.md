@@ -114,10 +114,11 @@ The steps listed below show what was done to get this web application up and run
 
 2. Creating AWS Elastic Beanstalk environment. Health Monitoring settings.
 
-	After selecting Basic Health Monitoring, default selection for Managed Monitoring Settings was checked, in order to create the environment with Basic Health monitoring, you have to deselect the Managed Monitoring service.
+	After selecting Basic Health Monitoring, default selection for Managed Platform Updates settings was checked, in order to create the environment with Basic Health monitoring, you have to deselect the Managed Platform Updates selection.
 
-3. Unable to access the application via the domain. Receiving Server 502 Error from nginx. 
-Error Log:
+3. Unable to access the application via the domain after Environment successfully created. Receiving Server 502 Error from nginx.
+
+/var/log/nginx/error.log:
 ```
 2024/07/26 15:19:29 [error] 2753#2753: *5 connect() failed (111: Connection refused) while connecting to upstream, client: 96.255.240.58, server: , request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:8000/", host: "deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com"
 2024/07/26 15:19:29 [error] 2753#2753: *5 connect() failed (111: Connection refused) while connecting to upstream, client: 96.255.240.58, server: , request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:8000/favicon.ico", host: "deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com", referrer: "http://deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com/"
@@ -153,7 +154,13 @@ Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR]
 Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR] Shutting down: Master
 Jul 28 02:29:37 ip-172-31-47-211 web: [2024-07-28 02:29:37 +0000] [2798] [ERROR] Reason: Worker failed to boot.
 ```
-The reason why we were getting these errors is because when we uploaded our application, we uploaded the zip folder directly downloaded from GitHub. AWS Elastic Beanstalk looks for the application file at the top level when the zip file is unzipped. In order to provide that properly, I had to take the Github zip and unzip it to get the main folder. Go into that folder and then zip all the files up inside and then upload that zip file to AWS Elastic Beanstalk. Then the web app could be accessed by the domain given.
+The reason why we were getting these errors is because when we uploaded our application, we uploaded the zip folder directly downloaded from GitHub. AWS Elastic Beanstalk looks for the application file at the top level when the zip file is unzipped. In order to provide that properly, I had to take the Github zip and unzip it to get the main folder. Go into that folder and then zip all the files up inside and then upload that zip file to AWS Elastic Beanstalk. Then the web app could be accessed by the domain given. This stack overflow post helped me figure this out. https://stackoverflow.com/questions/62479386/no-module-named-application-error-while-deploying-simple-web-app-to-elastic-be
+
+There were many other rabbit holes I dug myself into that were not the root of the issue or had any relationship to the issue. List is below:
+
+   * Application code designated port incorrect. (This was wrong, nothing was wrong with port 5000 stated in application code)
+   * Security Group settings for inbound traffic on my App Server. (Nothing was wrong with the security group)
+   * Procfile settings incorrect. (This wasn't the root of the issue but led me to the root) Doc on Procfile using Python https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/python-configuration-procfile.html
 
 ## Optimization
 
