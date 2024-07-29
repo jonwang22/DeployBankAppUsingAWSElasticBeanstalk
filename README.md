@@ -10,22 +10,25 @@ The steps listed below show what was done to get this web application up and run
 
 ## Steps Taken to Implement
 
+
 1. Git clone code repository to personal repository without creating a fork. The reason why we don't want to fork is because we want to have a completely independent copy of the repository, unrelated to the original repository. We can also modify access controls or repository settings that would not be possible if we had forked the original repository.
 
-      a. You can do it multiple ways but I chose to use this method https://gist.github.com/hohowin/954fba73f5a02d37e15a6ea5e5b10b54
-         - Create empty repo in Github, cannot have any commits.
-         - On EC2 instance or local machine, create empty directory and run `git init`
-         - Navigate to that empty directory and run `git pull $SOURCE_GITHUB_REPO` for your code
-         - Once the source code has been pulled down to your directory, run `git remote add origin $GIT_URL_NEW_CREATED_REPO` and then `git push origin main\master`
-            * Git remote essentially creates a link between your local respository to your remote repository hosted in Github.
-      b. The other ways you can clone a repository:
-         - Git clone source repository and add a remote link to destination repository.
-         - Git clone both source and destination repositories, copy files locally from source repo to destination repo and then git push files in the destination repo.
+   * You can do it multiple ways but I chose to use this method https://gist.github.com/hohowin/954fba73f5a02d37e15a6ea5e5b10b54
+      - Create empty repo in Github, cannot have any commits.
+      - On EC2 instance or local machine, create empty directory and run `git init`
+      - Navigate to that empty directory and run `git pull $SOURCE_GITHUB_REPO` for your code
+      - Once the source code has been pulled down to your directory, run `git remote add origin $GIT_URL_NEW_CREATED_REPO` and then `git push origin main\master`
+        * Git remote essentially creates a link between your local respository to your remote repository hosted in Github.
+        
+   * The other ways you can clone a repository:
+      - Git clone source repository and add a remote link to destination repository.
+      - Git clone both source and destination repositories, copy files locally from source repo to destination repo and then git push files in the destination repo.
    
 2. Created EC2 Instance to host Jenkins
-
-      a. Created EC2 Instance in AWS.
-      b. Created a security group that allowed SSH, HTTP and custom port 8080 for Jenkins.
+   
+   * Created EC2 Instance in AWS.
+   
+   * Created a security group that allowed SSH, HTTP and custom port 8080 for Jenkins.
 
 3. Installed Jenkins to my Jenkins server and started it up.
 
@@ -48,26 +51,56 @@ The steps listed below show what was done to get this web application up and run
    sudo systemctl status jenkins
    ```
 
-4. Logged in to Jenkins and created an admin user for me to perform the build and test actions I need before deploying my code to production via AWS Elastic Beanstalk.
+4. Interact with Jenkins
 
-5. Created a new multibranch pipeline and linked it to my github repo here so that Jenkins knows what source code it needs to build out and test.
+   * Connected to Jenkins Server via web browser using IP Address and port 8080
+   * Created Admin user account
+   * Created Multibranch Pipeline within Jenkins
+   * Linked this github repo to Jenkins
+   * Started a build.
 
-6. Build out the source code and test it. Jenkins completed the build and it went through multiple stages during the build.
+5. Jenkins Build/Test
 
-   	a. First stage is Checkout SCM. This stage of Jenkins is cloning and fetching the git repository to begin building it.
+   * First stage is Checkout SCM. This stage of Jenkins is cloning and fetching the git repository to begin building it.
+     ![Screenshot 2024-07-26 at 2 03 23 AM](https://github.com/user-attachments/assets/b1559658-49b0-448b-ad56-19ff48e73d73)
 
-   	b. Second stage is Build. This stage is where Jenkins downloads and installs dependencies to make sure it has what it needs to test the logical code in the package.
+   * Second stage is Build. This stage is where Jenkins downloads and installs dependencies to make sure it has what it needs to test the logical code in the package.
+     ![Screenshot 2024-07-26 at 2 03 34 AM](https://github.com/user-attachments/assets/a2127b33-9aa7-4b48-94d4-b61ef3e30355)
+     ![Screenshot 2024-07-26 at 2 03 59 AM](https://github.com/user-attachments/assets/2f5ff853-afbb-4460-a5e9-ef23e57750da)
 
-   	c. Third stage is Test. This stage is where the logic is tested from the application. Are the functions written and features written in the application working properly with the unit tests that were written for the application.
+   * Third stage is Test. This stage is where the logic is tested from the application. Are the functions written and features written in the application working properly with the unit tests that were written for the application.
+     ![Screenshot 2024-07-26 at 2 04 10 AM](https://github.com/user-attachments/assets/7cac9b12-607e-40b5-a60e-7a2b75187a05)
 
-   	d. Issues can arise during the build and testing phase. Build issues can be caused by configuration drift or version diffs on dependencies. Testing issues could happen if the unit tests weren't written properly or the logic doesn't work. Using Jenkins allows developers to iterate and test their code many times as needed before shipping it out to production environments, ensuring a working product/service for the customers to use. 
+   * Issues can arise during the build and testing phase. Build issues can be caused by configuration drift or version diffs on dependencies. Testing issues could happen if the unit tests weren't written properly or the logic doesn't work. Using Jenkins allows developers to iterate and test their code many times as needed before shipping it out to production environments, ensuring a working product/service for the customers to use.
+  
+   * Successful Build
+     ![Screenshot 2024-07-26 at 1 03 30 AM](https://github.com/user-attachments/assets/87340d5d-8bb0-4291-b661-492a1ad0524c) 
 
-7. Created AWS Elastic Beanstalk Environment to deploy our application.
+6. Deploy Application Using AWS Elastic Beanstalk
 
-      a. This allowed us to have our application managed by AWS Elastic Beanstalk. We don't have to worry about capacity, load balancing, autoscaling, or application health monitoring.
+   * I needed to create Service Roles for my Elastic Beanstalk environment so that the service has permissions to perform the actions it needs to manage my application for me. Service Roles and their policies are listed below.
+     * aws-elasticbeanstalk-service-role
+       * AWSElasticBeanstalkWebTier
+       * AWSElasticBeanstalkWorkerTier
+       * AWSElasticBeanstalkMulticontainerDocker
+     * Elastic-EC2
+       * Allow EC2 to call AWS Services
 
-      b. We can choose to create a web server environment or a worker environment and choose which platform we want to use. For this app we used Python.
+   * Once I have my service roles, I need to create my Elastic Beanstalk Environment. This environment is what allows me to set up the environment my Application will be hosted on.
 
+   * Environment Configuration
+     * Select "Web Server Environment"
+     * Enter Application name (I used DeployBankAppUsingAWSElasticBeanstalk)
+     * For Managed Platform, select Python3.7
+     * Upload the code from local. This is where you download the zip file from Github repo, unzip the folder, go into the folder and then zip the contents of that folder. Once you have the files zipped without the top level folder, then you can upload that zip file to Elastic Beanstalk. (See Issues/Troubleshooting for what happens if you upload the zip file directly after downloading it from Github)
+     * Selected instance configuration
+     * Selected VPC and subnet
+     * Selected Root Volume type, used General Purpose (SSD) and assigned 10GB
+     * Instance class just used free tier ones (t3.micro)
+     * Selected Basic Health Monitoring, de-selected Managed Monitoring option
+     * Once environment is built and ready, clicked the domain link to access the web application.
+
+   * For more information about AWS Elastic Beanstalk, https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/Welcome.html
 
 ## System Design Diagram
 
@@ -75,9 +108,15 @@ The steps listed below show what was done to get this web application up and run
 
 ## Issues/Troubleshooting
 
-1. Git Cloning a Repo without Forking
-2. Creating AWS Elastic Beanstalk environment. Health Monitoring settings. Default options selected, needed to use Basic and had to deselect a managed monitoring service in order to proceed and create the environment.
-3. Unable to access the application via the domain.
+1. Git cloning Source Repo (Original repo) and adding remote link to Destination Repo (This one)
+
+	I had some issues trying to figure out how to add another remote link after git cloning a repo to my local machine. I ended up dropping this and finding an easier way to pull the files and upload them to my new repo. See Steps above.
+
+2. Creating AWS Elastic Beanstalk environment. Health Monitoring settings.
+
+	After selecting Basic Health Monitoring, default selection for Managed Monitoring Settings was checked, in order to create the environment with Basic Health monitoring, you have to deselect the Managed Monitoring service.
+
+3. Unable to access the application via the domain. Receiving Server 502 Error from nginx. 
 Error Log:
 ```
 2024/07/26 15:19:29 [error] 2753#2753: *5 connect() failed (111: Connection refused) while connecting to upstream, client: 96.255.240.58, server: , request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:8000/", host: "deploybankappusingawselasticbean-env-1.eba-h9au3tz6.us-east-1.elasticbeanstalk.com"
