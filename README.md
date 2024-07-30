@@ -104,7 +104,9 @@ The steps listed below show what was done to get this web application up and run
 
 ## System Design Diagram
 
+![image](https://github.com/user-attachments/assets/38c9d63c-c112-41fa-ac65-397d0ac405b0)
 
+This is a basic system design of how this app will look like if it ever needed to expand to multiple instances. Essentially you have Route 53 handling the domain for the application. Elastic Load balancing handles web traffic to your web servers. Web servers are hosting your application.
 
 ## Issues/Troubleshooting
 
