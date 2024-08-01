@@ -188,3 +188,6 @@ There were many other rabbit holes I dug myself into that were not the root of t
 ## Conclusion
 
 This is a great project to figure out how to use Jenkins and deploy to AWS Elastic Beanstalk.
+
+![image](https://github.com/user-attachments/assets/f2f9061e-415f-45cb-b43e-425d6797cc5b)
+
